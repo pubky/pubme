@@ -11,8 +11,8 @@
 		969A9FFD2C5BC205001956F7 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969A9FFC2C5BC205001956F7 /* ContentView.swift */; };
 		969A9FFF2C5BC206001956F7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 969A9FFE2C5BC206001956F7 /* Assets.xcassets */; };
 		969AA0022C5BC206001956F7 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 969AA0012C5BC206001956F7 /* Preview Assets.xcassets */; };
-		969AA0092C5BC274001956F7 /* Mobile.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 969AA0082C5BC274001956F7 /* Mobile.xcframework */; };
-		969AA00B2C5BC29E001956F7 /* pubkymobile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969AA00A2C5BC29E001956F7 /* pubkymobile.swift */; };
+		969AA0112C5BC627001956F7 /* Pubky.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 969AA0102C5BC627001956F7 /* Pubky.xcframework */; };
+		969AA0132C5BC656001956F7 /* pubkymobile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969AA0122C5BC656001956F7 /* pubkymobile.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,8 +21,8 @@
 		969A9FFC2C5BC205001956F7 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		969A9FFE2C5BC206001956F7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		969AA0012C5BC206001956F7 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		969AA0082C5BC274001956F7 /* Mobile.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = Mobile.xcframework; sourceTree = "<group>"; };
-		969AA00A2C5BC29E001956F7 /* pubkymobile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = pubkymobile.swift; sourceTree = "<group>"; };
+		969AA0102C5BC627001956F7 /* Pubky.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Pubky.xcframework; path = "../../pubky-ffi/ffi/swift/Pubky.xcframework"; sourceTree = "<group>"; };
+		969AA0122C5BC656001956F7 /* pubkymobile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = pubkymobile.swift; path = "../../pubky-ffi/ffi/bindings/pubkymobile.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -30,7 +30,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				969AA0092C5BC274001956F7 /* Mobile.xcframework in Frameworks */,
+				969AA0112C5BC627001956F7 /* Pubky.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -58,8 +58,8 @@
 			children = (
 				969A9FFA2C5BC205001956F7 /* PubMeApp.swift */,
 				969A9FFC2C5BC205001956F7 /* ContentView.swift */,
-				969AA00A2C5BC29E001956F7 /* pubkymobile.swift */,
-				969AA0082C5BC274001956F7 /* Mobile.xcframework */,
+				969AA0122C5BC656001956F7 /* pubkymobile.swift */,
+				969AA0102C5BC627001956F7 /* Pubky.xcframework */,
 				969A9FFE2C5BC206001956F7 /* Assets.xcassets */,
 				969AA0002C5BC206001956F7 /* Preview Content */,
 			);
@@ -145,7 +145,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				969A9FFD2C5BC205001956F7 /* ContentView.swift in Sources */,
-				969AA00B2C5BC29E001956F7 /* pubkymobile.swift in Sources */,
+				969AA0132C5BC656001956F7 /* pubkymobile.swift in Sources */,
 				969A9FFB2C5BC205001956F7 /* PubMeApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

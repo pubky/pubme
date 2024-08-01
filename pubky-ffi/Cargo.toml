@@ -1,0 +1,11 @@
+[package]
+name = "pubky-ffi"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate_type = ["cdylib", "staticlib"]
+name = "pubkymobile"
+ 
+[dependencies]
+uniffi = { version = "0.25.3", features = [ "cli" ] }
