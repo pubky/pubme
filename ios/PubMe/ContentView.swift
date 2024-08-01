@@ -26,7 +26,7 @@ struct ContentView: View {
                     let startTime = DispatchTime.now().uptimeNanoseconds
                     
                     Task {
-                        let record = await resolve(publicKey: publicKey)
+                        let record = resolve(publicKey: publicKey)
                         DispatchQueue.main.async {
                             self.record = record
                             isResolving = false

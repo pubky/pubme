@@ -2,12 +2,7 @@ uniffi::setup_scaffolding!();
 use pkarr::{PkarrClient, PublicKey};
 
 #[uniffi::export]
-fn say_hi() -> String {
-    "Hello from Rust!".to_string()
-}
-
-#[uniffi::export]
-async fn resolve(public_key: String) -> String {
+fn resolve(public_key: String) -> String {
     let client = PkarrClient::builder().build().unwrap();
 
     let str: &str = &public_key;
