@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+let client = PubkyClient()
+
 struct ContentView: View {
     @State private var publicKey: String = "pk:7fmjpcuuzf54hw18bsgi3zihzyh4awseeuq5tmojefaezjbd64cy"
     @State var record: String? = nil
@@ -26,11 +28,19 @@ struct ContentView: View {
                     let startTime = DispatchTime.now().uptimeNanoseconds
                     
                     Task {
-                        let record = resolve(publicKey: publicKey)
-                        DispatchQueue.main.async {
-                            self.record = record
-                            isResolving = false
-                            milliseconds = (DispatchTime.now().uptimeNanoseconds - startTime)/1000000
+                        do {
+                            let res = try client.pkarrResolve(publicKey: publicKey)
+                            
+                            DispatchQueue.main.async {
+                                self.record =  res
+                                isResolving = false
+                                milliseconds = (DispatchTime.now().uptimeNanoseconds - startTime)/1000000
+                            }
+                        } catch {
+                            self.record = "ERROR FROM RUST: \(error.localizedDescription)"
+                            DispatchQueue.main.async {
+                                isResolving = false
+                            }
                         }
                     }
                 }

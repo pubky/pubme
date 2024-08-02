@@ -1,0 +1,27 @@
+namespace pubkyclient {
+    PubkyClient? get_default_client();
+    undefined set_default_client(PubkyClient client);
+};
+
+dictionary FfiKeypair {
+    string public_key;
+    string private_key;
+};
+
+[Error]
+enum FfiError {
+    "RandomErrorDontCare",
+};
+
+interface PubkyClient {
+    constructor();
+    
+    [Throws=FfiError]
+    string pkarr_resolve(string public_key);
+
+    [Throws=FfiError]
+    void signup(FfiKeypair keypair, string homeserver);
+
+    [Self=ByArc]
+    undefined make_default();
+};
