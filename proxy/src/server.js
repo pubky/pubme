@@ -1,11 +1,8 @@
 const fastify = require('fastify')({ logger: true });
 const {PubkyClient, Keypair, PublicKey} = require('@synonymdev/pubky');
 
-//TODO create a client per user
-const client = PubkyClient.testnet();
-const homeserver = PublicKey.from("8pinxxgqs41n4aididenw5apqp1urfmzdztr8jt4abrkdn435ewo");
-
-console.log(`Relays: ${JSON.stringify(client.getPkarrRelays())}`);
+//Creates a new client per user. pubky => client
+const clients = {};
 
 fastify.post('/generate-key-pair', async (request, reply) => {
   let keypair = Keypair.random();
@@ -14,9 +11,18 @@ fastify.post('/generate-key-pair', async (request, reply) => {
 });
 
 fastify.post('/signup', async (request, reply) => {
+  const secretKey = request.body.secretKey;
+  const homeServerPublicKey = request.body.homeServerPublicKey;
+
   const keypair = Keypair.fromSecretKey(z32ToBytes(request.body.secretKey));
+
+  const homeserver = PublicKey.from(homeServerPublicKey);
+
+  const client = PubkyClient.testnet();
   
   await client.signup(keypair, homeserver);
+
+  clients[keypair.publicKey().z32()] = client;
 
   const session = await client.session(keypair.publicKey());
   if (!session) {
@@ -30,14 +36,14 @@ fastify.post('/signup', async (request, reply) => {
 
 fastify.post('/put', async (request, reply) => {
   const publicKey = request.body.publicKey;
-  const chatId = request.body.chatId;
+  const url = request.body.url;
   const body = request.body.body;
 
   const bytes = new TextEncoder().encode(JSON.stringify(body));
 
-  const url = chatStoreUrl(publicKey, chatId);
-
   console.log(`💾 ${url} ${JSON.stringify(body)}`);
+
+  const client = clients[publicKey];
 
   await client.put(url, bytes);
 
@@ -45,16 +51,11 @@ fastify.post('/put', async (request, reply) => {
 });
 
 fastify.get('/get', async (request, reply) => {
-  const publicKey = request.query.publicKey;
-  const chatId = request.query.chatId;
+  //Decode the url from params
+  const url = request.query.url;
+  console.log(`📚 ${url}`);
 
-  console.log(`🔍 ${JSON.stringify(request.query)}`);
-
-  //TODO use cached client for this pubky
   const publicClient = PubkyClient.testnet();
-
-  const url = chatStoreUrl(publicKey, chatId);
-
   const bytes = await publicClient.get(url);
   const body = JSON.parse(new TextDecoder().decode(bytes));
 
@@ -63,11 +64,20 @@ fastify.get('/get', async (request, reply) => {
   reply.send(body);
 });
 
+fastify.get('/list', async (request, reply) => {
+  const url = request.query.url;
+
+  const publicClient = PubkyClient.testnet();
+  const list = await publicClient.list(url);
+
+  reply.send(list);
+});
+
 fastify.post('/delete', async (request, reply) => {
   const publicKey = request.body.publicKey;
-  const chatId = request.body.chatId;
+  const url = request.body.url;
 
-  const url = chatStoreUrl(publicKey, chatId);
+  const client = clients[publicKey];
 
   await client.delete(url);
 
@@ -81,12 +91,6 @@ module.exports = async ({host, port}) => {
     fastify.log.error(err);
     throw err;
   }
-}
-
-const chatStoreUrl = (publicKey, chatId) => {
-  //TODO make a chat ID
-  let url = `pubky://${publicKey}/pub/pubme.chat/${chatId}`;
-  return url;
 }
 
 const zBase32Alphabet = 'ybndrfg8ejkmcpqxot1uwisza345h769';
