@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		968A67E22C61486300D4C7CD /* PubkyClientProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 968A67E12C61486300D4C7CD /* PubkyClientProxy.swift */; };
 		969A9FFB2C5BC205001956F7 /* PubMeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969A9FFA2C5BC205001956F7 /* PubMeApp.swift */; };
 		969A9FFD2C5BC205001956F7 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969A9FFC2C5BC205001956F7 /* ContentView.swift */; };
 		969A9FFF2C5BC206001956F7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 969A9FFE2C5BC206001956F7 /* Assets.xcassets */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		968A67E12C61486300D4C7CD /* PubkyClientProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PubkyClientProxy.swift; sourceTree = "<group>"; };
 		969A9FF72C5BC205001956F7 /* PubMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PubMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		969A9FFA2C5BC205001956F7 /* PubMeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PubMeApp.swift; sourceTree = "<group>"; };
 		969A9FFC2C5BC205001956F7 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -37,6 +39,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		968A67E02C61484A00D4C7CD /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				968A67E12C61486300D4C7CD /* PubkyClientProxy.swift */,
+			);
+			path = Util;
+			sourceTree = "<group>";
+		};
 		969A9FEE2C5BC205001956F7 = {
 			isa = PBXGroup;
 			children = (
@@ -58,6 +68,7 @@
 			children = (
 				969A9FFA2C5BC205001956F7 /* PubMeApp.swift */,
 				969A9FFC2C5BC205001956F7 /* ContentView.swift */,
+				968A67E02C61484A00D4C7CD /* Util */,
 				969AA01A2C5CF323001956F7 /* pubkyclient.swift */,
 				969AA0182C5CF31D001956F7 /* Pubky.xcframework */,
 				969A9FFE2C5BC206001956F7 /* Assets.xcassets */,
@@ -145,6 +156,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				969A9FFD2C5BC205001956F7 /* ContentView.swift in Sources */,
+				968A67E22C61486300D4C7CD /* PubkyClientProxy.swift in Sources */,
 				969A9FFB2C5BC205001956F7 /* PubMeApp.swift in Sources */,
 				969AA01B2C5CF323001956F7 /* pubkyclient.swift in Sources */,
 			);

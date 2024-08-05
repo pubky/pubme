@@ -11,10 +11,11 @@ fastify.post('/generate-key-pair', async (request, reply) => {
 });
 
 fastify.post('/signup', async (request, reply) => {
+  console.log(request.body);
   const secretKey = request.body.secretKey;
   const homeServerPublicKey = request.body.homeServerPublicKey;
 
-  const keypair = Keypair.fromSecretKey(z32ToBytes(request.body.secretKey));
+  const keypair = Keypair.fromSecretKey(z32ToBytes(secretKey));
 
   const homeserver = PublicKey.from(homeServerPublicKey);
 

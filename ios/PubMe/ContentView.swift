@@ -61,6 +61,9 @@ struct ContentView: View {
             }
             .navigationTitle("Pkarr")
         }
+        .onAppear {
+            testPubkyClientProxy()
+        }
     }
 }
 
