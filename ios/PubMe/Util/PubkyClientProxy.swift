@@ -138,7 +138,7 @@ func testPubkyClientProxy() {
             try await PubkyClientProxy.shared.put(
                 publicKey: keypair.publicKey,
                 url: PubkyClientProxy.chatStoreUrl(publicKey: keypair.publicKey, chatId: chatId, messageId: "message-1"),
-                body: Message.initNewSendMessage("Hello this message was sent!").toString()
+                body: Message.initNewSendMessage("Hello this message was sent!", ownPublicKey: keypair.publicKey).toString()
             )
             
             print("List")

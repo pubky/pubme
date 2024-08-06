@@ -19,7 +19,10 @@
 		968A67F72C6215C700D4C7CD /* Env.swift in Sources */ = {isa = PBXBuildFile; fileRef = 968A67F62C6215C700D4C7CD /* Env.swift */; };
 		968A67F92C62213F00D4C7CD /* MyPubkyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 968A67F82C62213F00D4C7CD /* MyPubkyView.swift */; };
 		968A67FB2C62243400D4C7CD /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 968A67FA2C62243400D4C7CD /* SettingsView.swift */; };
-		968A67FD2C62470A00D4C7CD /* FriendsPublicKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 968A67FC2C62470A00D4C7CD /* FriendsPublicKeys.swift */; };
+		968A67FD2C62470A00D4C7CD /* PubkeysView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 968A67FC2C62470A00D4C7CD /* PubkeysView.swift */; };
+		968A68012C62504700D4C7CD /* MessageInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 968A68002C62504700D4C7CD /* MessageInputView.swift */; };
+		968A68032C6251BE00D4C7CD /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 968A68022C6251BE00D4C7CD /* MessageView.swift */; };
+		968A68052C62579700D4C7CD /* KeyboardResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 968A68042C62579700D4C7CD /* KeyboardResponder.swift */; };
 		969A9FFB2C5BC205001956F7 /* PubMeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969A9FFA2C5BC205001956F7 /* PubMeApp.swift */; };
 		969A9FFD2C5BC205001956F7 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969A9FFC2C5BC205001956F7 /* ContentView.swift */; };
 		969A9FFF2C5BC206001956F7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 969A9FFE2C5BC206001956F7 /* Assets.xcassets */; };
@@ -41,7 +44,10 @@
 		968A67F62C6215C700D4C7CD /* Env.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Env.swift; sourceTree = "<group>"; };
 		968A67F82C62213F00D4C7CD /* MyPubkyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPubkyView.swift; sourceTree = "<group>"; };
 		968A67FA2C62243400D4C7CD /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		968A67FC2C62470A00D4C7CD /* FriendsPublicKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsPublicKeys.swift; sourceTree = "<group>"; };
+		968A67FC2C62470A00D4C7CD /* PubkeysView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PubkeysView.swift; sourceTree = "<group>"; };
+		968A68002C62504700D4C7CD /* MessageInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageInputView.swift; sourceTree = "<group>"; };
+		968A68022C6251BE00D4C7CD /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
+		968A68042C62579700D4C7CD /* KeyboardResponder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardResponder.swift; sourceTree = "<group>"; };
 		969A9FF72C5BC205001956F7 /* PubMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PubMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		969A9FFA2C5BC205001956F7 /* PubMeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PubMeApp.swift; sourceTree = "<group>"; };
 		969A9FFC2C5BC205001956F7 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -70,6 +76,7 @@
 				968A67E32C62060800D4C7CD /* Keychain.swift */,
 				968A67E52C62066300D4C7CD /* Logger.swift */,
 				968A67EF2C6207DF00D4C7CD /* ShowError.swift */,
+				968A68042C62579700D4C7CD /* KeyboardResponder.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -80,9 +87,8 @@
 				968A67ED2C6206FB00D4C7CD /* OnboardingView.swift */,
 				968A67EB2C6206E900D4C7CD /* ChatListView.swift */,
 				968A67F12C62110100D4C7CD /* ChatView.swift */,
-				968A67F82C62213F00D4C7CD /* MyPubkyView.swift */,
 				968A67FA2C62243400D4C7CD /* SettingsView.swift */,
-				968A67FC2C62470A00D4C7CD /* FriendsPublicKeys.swift */,
+				968A67FC2C62470A00D4C7CD /* PubkeysView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -101,6 +107,16 @@
 				968A67F42C6211A500D4C7CD /* Messages.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		968A67FF2C62501300D4C7CD /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				968A67F82C62213F00D4C7CD /* MyPubkyView.swift */,
+				968A68002C62504700D4C7CD /* MessageInputView.swift */,
+				968A68022C6251BE00D4C7CD /* MessageView.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 		969A9FEE2C5BC205001956F7 = {
@@ -127,6 +143,7 @@
 				969A9FFC2C5BC205001956F7 /* ContentView.swift */,
 				968A67E72C6206C000D4C7CD /* Views */,
 				968A67E82C6206CA00D4C7CD /* ViewModels */,
+				968A67FF2C62501300D4C7CD /* Components */,
 				968A67F32C62119500D4C7CD /* Models */,
 				968A67E02C61484A00D4C7CD /* Util */,
 				969AA01A2C5CF323001956F7 /* pubkyclient.swift */,
@@ -216,6 +233,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				968A67FB2C62243400D4C7CD /* SettingsView.swift in Sources */,
+				968A68052C62579700D4C7CD /* KeyboardResponder.swift in Sources */,
 				968A67EE2C6206FB00D4C7CD /* OnboardingView.swift in Sources */,
 				968A67F72C6215C700D4C7CD /* Env.swift in Sources */,
 				968A67F52C6211A500D4C7CD /* Messages.swift in Sources */,
@@ -227,10 +245,12 @@
 				968A67E22C61486300D4C7CD /* PubkyClientProxy.swift in Sources */,
 				969A9FFB2C5BC205001956F7 /* PubMeApp.swift in Sources */,
 				968A67EC2C6206E900D4C7CD /* ChatListView.swift in Sources */,
-				968A67FD2C62470A00D4C7CD /* FriendsPublicKeys.swift in Sources */,
+				968A68032C6251BE00D4C7CD /* MessageView.swift in Sources */,
+				968A67FD2C62470A00D4C7CD /* PubkeysView.swift in Sources */,
 				969AA01B2C5CF323001956F7 /* pubkyclient.swift in Sources */,
 				968A67E42C62060800D4C7CD /* Keychain.swift in Sources */,
 				968A67F02C6207DF00D4C7CD /* ShowError.swift in Sources */,
+				968A68012C62504700D4C7CD /* MessageInputView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

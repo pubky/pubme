@@ -12,11 +12,6 @@ struct SettingsView: View {
     
     var body: some View {
         Form {
-            Section("My public key") {
-                MyPubkyView(publicKey: viewModel.myPublicKey)
-                    .padding(.vertical)
-            }
-            
             Section("Backend") {
                 Label("Home Server", systemImage: "house.fill")
                 TextField("Home Server", text: $viewModel.homeServerPublicKey)

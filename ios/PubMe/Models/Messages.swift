@@ -22,8 +22,12 @@ struct MessageBody: Codable {
 }
 
 struct Message: Codable, Identifiable {
-    static func initNewSendMessage(_ text: String) -> Message {
-        return Message(id: UUID().uuidString, body: MessageBody(text: text, timestamp: Date()))
+    static func initNewSendMessage(_ text: String, ownPublicKey: String) -> Message {
+        return Message(
+            id: UUID().uuidString,
+            ownerPublicKey: ownPublicKey, 
+            body: MessageBody(text: text, timestamp: Date())
+        )
     }
     
     static func initFromString(_ jsonString: String) throws -> Message {
@@ -48,5 +52,6 @@ struct Message: Codable, Identifiable {
     }
     
     let id: String
+    let ownerPublicKey: String
     let body: MessageBody
 }

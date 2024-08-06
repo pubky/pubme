@@ -16,7 +16,7 @@ struct MyPubkyView: View {
     @State var isCopied = false
     
     var body: some View {
-        VStack {
+        VStack(alignment: .center) {
             Text("Share your public key with your friends")
                 .font(.title3)
                 .multilineTextAlignment(.center)
@@ -32,8 +32,9 @@ struct MyPubkyView: View {
             
             ZStack {
                 Text(publicKey)
-                    .font(.caption2)
-                    .padding()
+                    .font(.caption)
+                    .multilineTextAlignment(.center)
+                    .padding(.top)
                     .opacity(isCopied ? 0 : 1)
                 
                 Text("Copied!")

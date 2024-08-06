@@ -17,7 +17,7 @@ struct ChatListView: View {
                 list
                     .navigationBarItems(leading: settingsButton)
                     .navigationBarItems(trailing: addButton)
-                    .navigationTitle("Pubme")
+                    .navigationTitle("Chats")
             } else {
                 loader
             }
@@ -37,8 +37,8 @@ struct ChatListView: View {
             
             VStack {
                 Spacer()
-                NavigationLink(destination: FriendsPublicKeys()) {
-                    Label("Friend pubkeys", systemImage: "key.fill")
+                NavigationLink(destination: PubkeysView()) {
+                    Label("Pubkeys", systemImage: "key.fill")
                 }
             }
         }

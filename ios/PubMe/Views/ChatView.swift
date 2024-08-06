@@ -5,7 +5,11 @@
 //  Created by Jason van den Berg on 2024/08/06.
 //
 
+import UIKit
 import SwiftUI
+
+let closedKeyboardOffset: CGFloat = UIDevice.isIPad ? -60 : UIDevice.isIPhoneSE ? -40 : -10
+let openKeyboardOffset: CGFloat = UIDevice.isIPad ? -60 : 40
 
 struct ChatView: View {
     @State var group: ChatGroup?
@@ -16,29 +20,30 @@ struct ChatView: View {
     @State var isRefreshing = false
     
     @StateObject var viewModel = ViewModel.shared
-    
+    @ObservedObject private var keyboard = KeyboardResponder()
+
     @State private var pollTimer: Timer?
     
+    let scrollViewId = "ChatScrollView"
+    @State var yOffset: CGFloat = .zero
+    @State var dragDownDistance: CGFloat = .zero
+    @State var textInputOffset: CGFloat = closedKeyboardOffset
+
+    
     var body: some View {
-        List {
-            if let messages = messages {
-                ForEach(messages) { message in
-                    Text(message.body.text)
+        ZStack {
+            content
+                .onTapGesture {
+                    endEditing(true)
                 }
+            if let groupId = group?.id {
+                MessageInputView(groupId: groupId, keyboardOpen: $keyboard.isOpen)
+                    .offset(y: textInputOffset)
             }
-        }
-        .overlay {
-            Button {
-                sendMessage()
-            } label: {
-                Label("Send test message", systemImage: "paperplane")
-            }
-            .disabled(isSending)
         }
         .navigationTitle(group?.shortId ?? "Creating new chat...")
         .onAppear {
-            if let group {
-                //TODO load chat
+            if let _ = group {
                 loadMessages()
             } else {
                 createNewGroup()
@@ -47,6 +52,71 @@ struct ChatView: View {
             startPolling()
         }
         .showError($errorMessage)
+    }
+    
+    @ViewBuilder
+    var content: some View {
+        if let messages {
+            ScrollViewReader { scrollView in
+                VStack {
+                    ScrollView(.vertical) {
+                        scrollDetection
+                        VStack {
+                            ForEach(messages) { message in
+                                MessageView(message: message, isCurrentUser: message.ownerPublicKey == viewModel.myPublicKey, chatId: group!.id)
+                                    .listRowSeparator(.hidden)
+                            }
+                            listSpacer
+                        }
+                        .padding(.horizontal, 12)
+                        .id(scrollViewId)
+                    }
+                    .onChange(of: keyboard.isOpen) { isOpen in
+                        guard isOpen else { return }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            withAnimation {
+                                scrollView.scrollTo(scrollViewId, anchor: .bottom)
+                            }
+                        }
+                    }
+                    .onAppear {
+                        scrollView.scrollTo(scrollViewId, anchor: .bottom)
+                    }
+                }
+            }
+            .coordinateSpace(name: ScrollDetector.name)
+        }
+    }
+    
+    var listSpacer: some View {
+        Rectangle()
+            .listRowBackground(Color.clear)
+            .listRowSeparator(.hidden)
+            .frame(width: 0, height: 70)
+    }
+    
+    var scrollDetection: some View {
+        Group {
+            ScrollDetector()
+            GeometryReader { proxy in
+                let offset = proxy.frame(in: .named(ScrollDetector.name)).minY
+                Color.clear.preference(key: ScrollPreferenceKey.self, value: offset)
+            }
+            .onPreferenceChange(ScrollPreferenceKey.self) { offset in
+                if offset > yOffset {
+                    //Scrolling down
+                    dragDownDistance += offset-yOffset
+                    if dragDownDistance > 120 {
+                        endEditing(false)
+                    }
+                } else {
+                    //Scrolling up cancels the drag
+                    dragDownDistance = .zero
+                }
+                
+                yOffset = offset
+            }
+        }
     }
     
     func createNewGroup() {
@@ -116,6 +186,57 @@ struct ChatView: View {
         pollTimer = nil
     }
 }
+
+extension View {
+    func endEditing(_ force: Bool) {
+        UIApplication.shared.windows.forEach { $0.endEditing(force)}
+    }
+}
+
+struct ScrollPreferenceKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = nextValue()
+    }
+}
+
+struct ScrollDetector: View {
+    @ObservedObject var viewModel = ViewModel.shared
+    
+    static let name = "scroll"
+    
+    var body: some View {
+        GeometryReader { proxy in
+            let offset = proxy.frame(in: .named(ScrollDetector.name)).minY
+            Color.clear.preference(key: ScrollPreferenceKey.self, value: offset)
+        }
+        .onPreferenceChange(ScrollPreferenceKey.self) { offset in
+//            viewModel.showScrolledContentNav = offset < -40
+        }
+    }
+}
+
+extension UIDevice {
+    static var isIPad: Bool {
+        UIDevice.current.userInterfaceIdiom == .pad
+    }
+    
+    static var isIPhone: Bool {
+        UIDevice.current.userInterfaceIdiom == .phone
+    }
+    
+    static var isIPhoneSE: Bool {
+        UIDevice.current.userInterfaceIdiom == .phone && UIScreen.screenHeight < 670
+    }
+}
+
+extension UIScreen {
+   static let screenWidth = UIScreen.main.bounds.size.width
+   static let screenHeight = UIScreen.main.bounds.size.height
+   static let screenSize = UIScreen.main.bounds.size
+}
+
+
 
 #Preview {
     ChatView(group: .init(publicKeys: ["1", "2", "3"]))

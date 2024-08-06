@@ -1,5 +1,5 @@
 //
-//  FriendsPublicKeys.swift
+//  PubkeysView.swift
 //  PubMe
 //
 //  Created by Jason van den Berg on 2024/08/06.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct FriendsPublicKeys: View {
+struct PubkeysView: View {
     @StateObject var viewModel = ViewModel.shared
     
     @State var newPublicKey = ""
@@ -17,7 +17,7 @@ struct FriendsPublicKeys: View {
     var body: some View {
         Form {
             Section("Add new") {
-                TextField("Public key", text: $newPublicKey)
+                TextField("Pubkey", text: $newPublicKey)
                     .disableAutocorrection(true)
                     .autocapitalization(.none)
                 
@@ -34,13 +34,17 @@ struct FriendsPublicKeys: View {
                 }
             }
             
-            Section("Existing") {
+            Section("My pubkey") {
+                MyPubkyView(publicKey: viewModel.myPublicKey)
+                    .padding(.vertical)
+                    .frame(maxWidth: .infinity)
+            }
+            
+            Section("Saved public keys") {
                 existingList
             }
         }
-        .navigationTitle("Friends Public Keys")
-        
-        
+        .navigationTitle("Pubkeys")
     }
     
     @ViewBuilder
@@ -57,5 +61,5 @@ struct FriendsPublicKeys: View {
 }
 
 #Preview {
-    FriendsPublicKeys()
+    PubkeysView()
 }
