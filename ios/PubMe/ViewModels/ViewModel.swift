@@ -15,6 +15,9 @@ enum ViewModelErrors: Error {
 class ViewModel: ObservableObject {
     @Published var keypairExists: Bool? = nil
     @Published var chatGroups: [ChatGroup]? = nil
+    @Published var myPublicKey = ""
+    
+    @AppStorage("homeServerPublicKey") var homeServerPublicKey = Env.defaultHomeServer
     
     private init() {}
     public static var shared = ViewModel()
@@ -25,6 +28,7 @@ class ViewModel: ObservableObject {
             
             if exists {
                 try await setupClient()
+                myPublicKey = try Keychain.loadString(key: .publicKey)!
             }
             
             keypairExists = exists
@@ -46,7 +50,7 @@ class ViewModel: ObservableObject {
         guard let secretKey = try Keychain.loadString(key: .secretKey) else {
             throw ViewModelErrors.missingKey
         }
-        try await PubkyClientProxy.shared.signup(secretKey: secretKey)
+        try await PubkyClientProxy.shared.signup(secretKey: secretKey, homeServerPublicKey: homeServerPublicKey)
     }
     
     func loadAllChatGroups() async throws {
@@ -58,5 +62,9 @@ class ViewModel: ObservableObject {
         
         //TODO add all friend's public keys
         chatGroups = urls.map { ChatGroup(id: $0, url: $0, publicKeys: []) }
+    }
+    
+    func createNewChatGroup() async throws {
+        
     }
 }

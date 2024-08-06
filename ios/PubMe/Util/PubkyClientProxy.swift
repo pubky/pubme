@@ -7,15 +7,10 @@
 
 import Foundation
 
-let proxyServer = "http://localhost:3000";
-let homeServerPublicKey = "8pinxxgqs41n4aididenw5apqp1urfmzdztr8jt4abrkdn435ewo";
-
 struct Keypair: Codable {
     let secretKey: String
     let publicKey: String
 }
-
-
 
 class PubkyClientProxy {
     static let shared = PubkyClientProxy()
@@ -27,7 +22,7 @@ class PubkyClientProxy {
         return try JSONDecoder().decode(Keypair.self, from: keypairData)
     }
     
-    func signup(secretKey: String) async throws {
+    func signup(secretKey: String, homeServerPublicKey: String) async throws {
         let _ = try await Self.postRequest("signup", [
             "secretKey": secretKey,
             "homeServerPublicKey": homeServerPublicKey
@@ -79,7 +74,7 @@ enum PubkyClientProxyError: Error {
 
 extension PubkyClientProxy {
     static func postRequest(_ action: String, _ params: [String: String] = [:]) async throws -> Data {
-        let url = URL(string: "\(proxyServer)/\(action)")!
+        let url = URL(string: "\(Env.tempClientProxyServer)/\(action)")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         
@@ -97,7 +92,7 @@ extension PubkyClientProxy {
     }
     
     static func getRequest(_ action: String, _ params: [String: String] = [:]) async throws -> Data {
-        var urlComponents = URLComponents(string: "\(proxyServer)/\(action)")!
+        var urlComponents = URLComponents(string: "\(Env.tempClientProxyServer)/\(action)")!
         urlComponents.queryItems = params.map { URLQueryItem(name: $0.key, value: $0.value) }
         
         let url = urlComponents.url!
@@ -137,7 +132,7 @@ func testPubkyClientProxy() {
             print(keypair)
             
             print("Signing up")
-            try await PubkyClientProxy.shared.signup(secretKey: keypair.secretKey)
+            try await PubkyClientProxy.shared.signup(secretKey: keypair.secretKey, homeServerPublicKey: Env.defaultHomeServer)
             
             print("Put")
             try await PubkyClientProxy.shared.put(

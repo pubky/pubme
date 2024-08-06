@@ -19,7 +19,6 @@ enum KeychainError: Error {
 enum KeychainEntryType {
     case secretKey
     case publicKey
-    case homeServerPublicKey
         
     var storageKey: String {
         switch self {
@@ -27,8 +26,6 @@ enum KeychainEntryType {
             return "secretKey"
         case .publicKey:
             return "publicKey"
-        case .homeServerPublicKey:
-            return "homeServerPublicKey"
         }
     }
 }

@@ -13,13 +13,13 @@ struct ContentView: View {
     @StateObject private var viewModel = ViewModel.shared
     
     var body: some View {
-        VStack {
+        NavigationView {
             if viewModel.keypairExists == nil {
                 ProgressView()
             } else if viewModel.keypairExists == true {
-                ChatList()
+                ChatListView()
             } else {
-                Onboarding()
+                OnboardingView()
             }
         }
         .onChange(of: viewModel.keypairExists) { _ in
