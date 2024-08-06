@@ -18,13 +18,8 @@ struct MyPubkyView: View {
     var body: some View {
         VStack {
             Text("Share your public key with your friends")
-                .font(.title)
+                .font(.title3)
                 .multilineTextAlignment(.center)
-            
-            Text("Or scan a friend's public key to start chatting!")
-                .multilineTextAlignment(.center)
-            
-            Spacer()
             
             if let qrImage = generateQRCode(from: publicKey) {
                 Image(uiImage: qrImage)
@@ -48,7 +43,6 @@ struct MyPubkyView: View {
             
             Spacer()
         }
-        .padding()
         .onTapGesture {
             UIPasteboard.general.string = publicKey
             withAnimation {

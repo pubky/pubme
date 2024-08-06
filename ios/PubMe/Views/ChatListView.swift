@@ -16,7 +16,7 @@ struct ChatListView: View {
             if let groups = viewModel.chatGroups {
                 list
                     .navigationBarItems(leading: settingsButton)
-                    .navigationBarItems(trailing: qrButton)
+                    .navigationBarItems(trailing: addButton)
                     .navigationTitle("Pubme")
                     .overlay {
                         if groups.count == 0 {
@@ -24,13 +24,10 @@ struct ChatListView: View {
                                 Text("No Chat Groups")
                                     .font(.title)
                                     .padding()
-                                Button(action: {
-                                    Task { @MainActor in
-                                        
-                                    }
-                                }, label: {
+                                
+                                NavigationLink(destination: ChatView(groupId: nil)) {
                                     Label("Create New Group", systemImage: "plus.circle")
-                                })
+                                }
                             }
                         }
                     }
@@ -52,16 +49,22 @@ struct ChatListView: View {
         }
     }
     
-    var qrButton: some View {
-        NavigationLink(destination: MyPubkyView(publicKey: viewModel.myPublicKey)) {
-            Image(systemName: "qrcode")
+    var addButton: some View {
+        NavigationLink(destination: ChatView(groupId: nil)) {
+            Image(systemName: "plus.circle")
         }
     }
     
+    
     var list: some View {
         List(viewModel.chatGroups!) { group in
-            NavigationLink(destination: ChatView(chatId: group.id)) {
-                Text(group.url)
+            NavigationLink(destination: ChatView(groupId: group.id)) {
+                HStack {
+                    Image(systemName: "person.3")
+                        .foregroundColor(Color("AccentColor"))
+                    Text(group.id.split(separator: "-").first ?? "Unknown")
+                        .font(.caption)
+                }
             }
         }
         .refreshable {

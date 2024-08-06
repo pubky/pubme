@@ -8,13 +8,47 @@
 import SwiftUI
 
 struct ChatView: View {
-    let chatId: String
+    @State var groupId: String?
+    @State var isCreating = false
+    @State var errorMessage = ""
+    
+    @StateObject var viewModel = ViewModel.shared
     
     var body: some View {
-        Text("chatId: \(chatId)")
+        HStack {
+            Text(groupId ?? "Creating new chat...")
+                .font(.caption2)
+        }
+        .onAppear {
+            if let groupId {
+                //TODO load chat
+            } else {
+                createNewGroup()
+            }
+        }
+        .showError($errorMessage)
+    }
+    
+    func createNewGroup() {
+        isCreating = true
+        Task { @MainActor in
+            do {
+                groupId = try await viewModel.createNewChatGroup()
+                await loadMessages()
+                try? await viewModel.loadAllChatGroups() //So list is loaded when we navigate back
+            } catch {
+                errorMessage = error.localizedDescription
+            }
+            
+            isCreating = false
+        }
+    }
+    
+    func loadMessages() async {
+        
     }
 }
 
 #Preview {
-    ChatView(chatId: "123")
+    ChatView(groupId: "123")
 }

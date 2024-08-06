@@ -9,7 +9,6 @@ import SwiftUI
 
 struct ChatGroup: Identifiable {
     var id = UUID().uuidString
-    var url: String
     var publicKeys: [String]
 }
 

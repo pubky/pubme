@@ -24,11 +24,6 @@ struct ContentView: View {
         }
         .onChange(of: viewModel.keypairExists) { _ in
             Logger.info("keypair exists state changed: \(viewModel.keypairExists?.description ?? "nil")")
-            if viewModel.keypairExists == true {
-                Task {
-                    try await viewModel.loadAllChatGroups()
-                }
-            }
         }
         .onAppear {
             Task {

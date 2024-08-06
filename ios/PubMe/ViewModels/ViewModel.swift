@@ -32,7 +32,7 @@ class ViewModel: ObservableObject {
             }
             
             keypairExists = exists
-
+            
         } catch {
             //TODO show error
             Logger.error(error)
@@ -54,17 +54,50 @@ class ViewModel: ObservableObject {
     }
     
     func loadAllChatGroups() async throws {
+        if Env.isPreview {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self.chatGroups = [
+                    ChatGroup(id: UUID().uuidString, publicKeys: [UUID().uuidString, UUID().uuidString, UUID().uuidString]),
+                    ChatGroup(id: UUID().uuidString, publicKeys: [UUID().uuidString, UUID().uuidString])
+                ]
+            }
+            return
+        }
+        
         guard let publicKey = try Keychain.loadString(key: .publicKey) else {
             throw ViewModelErrors.missingKey
         }
         
-        let urls = try await PubkyClientProxy.shared.list(url: PubkyClientProxy.chatStoreUrl(publicKey: publicKey))
+        Logger.info("Loading chat groups for \(publicKey)")
         
+        let ownDatastoreUrl = PubkyClientProxy.chatStoreUrl(publicKey: publicKey)
+        
+        let urls = try await PubkyClientProxy.shared.list(url: ownDatastoreUrl)
+        
+        //Get unique group IDs
+        let uniqueGroupIds = urls
+            .map { $0.replacingOccurrences(of: ownDatastoreUrl, with: "").split(separator: "/").first }
+            .compactMap { $0 }
+            .filter { !$0.isEmpty }
+                
         //TODO add all friend's public keys
-        chatGroups = urls.map { ChatGroup(id: $0, url: $0, publicKeys: []) }
+        
+        chatGroups = uniqueGroupIds.map { ChatGroup(id: String($0), publicKeys: []) }               
     }
     
-    func createNewChatGroup() async throws {
+    func createNewChatGroup() async throws -> String {
+        guard let publicKey = try Keychain.loadString(key: .publicKey) else {
+            throw ViewModelErrors.missingKey
+        }
         
+        let chatId = UUID().uuidString
+        
+        try await PubkyClientProxy.shared.put(
+            publicKey: publicKey,
+            url: PubkyClientProxy.chatStoreUrl(publicKey: publicKey, chatId: chatId, messageId: "message-1"),
+            body: Message.initNewSendMessage("Hello!").toString()
+        )
+        
+        return chatId
     }
 }
