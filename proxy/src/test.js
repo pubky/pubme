@@ -3,11 +3,11 @@ const axios = require('axios');
 const server = 'http://0.0.0.0:3000';
 const homeServerPublicKey = '8pinxxgqs41n4aididenw5apqp1urfmzdztr8jt4abrkdn435ewo';
 
-const createMessage = (message) => {
+const createMessage = (text) => {
     return {
         chatId: Math.random().toString(36).substring(7),
         body: {
-            message,
+            text,
             timestamp: new Date().toISOString()
         }
     };
@@ -50,7 +50,7 @@ const test = async () => {
         response = await axios.post(`${server}/put`, {
             publicKey,
             url: chatStoreUrl(publicKey, chatId),
-            body: body
+            body: JSON.stringify(body)
         });
         if (response.status !== 200) {
             throw new Error('POST /put failed');
@@ -93,7 +93,7 @@ const test = async () => {
 
         const data = response.data;
 
-        console.log(`✅ Data: ${JSON.stringify(data)}`);
+        console.log(`✅ Message: ${data['text']}`);
     }
     
     // Test delete chat
@@ -129,7 +129,7 @@ const chatStoreUrl = (publicKey, chatId) => {
     }
   
     return url;
-  }
+}
 
 test()
     .then(() => {

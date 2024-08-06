@@ -15,50 +15,107 @@ struct Keypair: Codable {
     let publicKey: String
 }
 
+struct MessageBody: Codable {
+    let text: String
+    let timestamp: Date
+}
+
+struct Message: Codable, Identifiable {
+    static func initNewSendMessage(_ text: String) -> Message {
+        return Message(id: UUID().uuidString, body: MessageBody(text: text, timestamp: Date()))
+    }
+    
+    static func initFromString(_ jsonString: String) throws -> Message {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        guard let data = jsonString.data(using: .utf8) else {
+            throw PubkyClientProxyError.invalidJson
+        }
+        return try decoder.decode(Message.self, from: data)
+    }
+    
+    func toString() throws -> String {
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        let data = try encoder.encode(self)
+        
+        if let jsonString = String(data: data, encoding: .utf8) {
+            return jsonString
+        } else {
+            throw PubkyClientProxyError.invalidJson
+        }
+    }
+    
+    let id: String
+    let body: MessageBody
+}
+
 class PubkyClientProxy {
     static let shared = PubkyClientProxy()
     private init() {}
     
     func generateKeyPair() async throws -> Keypair {
-        let keypairData = try await postRequest("generate-key-pair")
+        let keypairData = try await Self.postRequest("generate-key-pair")
         
         return try JSONDecoder().decode(Keypair.self, from: keypairData)
     }
     
     func signup(secretKey: String) async throws {
-        let _ = try await postRequest("signup", [
+        let _ = try await Self.postRequest("signup", [
             "secretKey": secretKey,
             "homeServerPublicKey": homeServerPublicKey
         ])
     }
     
-    func put(url: String, data: Data) async throws {
+    func put(publicKey: String, url: String, body: String) async throws {
+        let _ = try await Self.postRequest("put", [
+            "publicKey": publicKey,
+            "url": url,
+            "body": body
+        ])
         
+        print("PUT: \(url)")
     }
     
-    func list() async throws -> [String] {
-        return []
+    //Lists all URLs
+    func list(url: String) async throws -> [String] {
+        print(url)
+        let listJsonString = try await Self.getRequest("list", [
+            "url": url,
+        ])
+        
+        guard let list = try JSONSerialization.jsonObject(with: listJsonString, options: []) as? [String] else {
+            throw PubkyClientProxyError.invalidJson
+        }
+        
+        return list
     }
     
     func get(url: String) async throws -> Data {
-        return Data()
+        return try await Self.getRequest("get", [
+            "url": url
+        ])
     }
     
-    func delete(url: String) async throws {
-        
+    func delete(publicKey: String, url: String) async throws {
+        let _ = try await Self.postRequest("delete", [
+            "publicKey": publicKey,
+            "url": url
+        ])
     }
 }
 
 enum PubkyClientProxyError: Error {
     case invalidResponse
+    case invalidJson
 }
 
 extension PubkyClientProxy {
-    fileprivate func postRequest(_ action: String, _ params: [String: String] = [:]) async throws -> Data {
+    static func postRequest(_ action: String, _ params: [String: String] = [:]) async throws -> Data {
         let url = URL(string: "\(proxyServer)/\(action)")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-       
+        
         request.httpBody = try JSONSerialization.data(withJSONObject: params, options: [])
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
@@ -71,11 +128,43 @@ extension PubkyClientProxy {
         
         return data
     }
+    
+    static func getRequest(_ action: String, _ params: [String: String] = [:]) async throws -> Data {
+        var urlComponents = URLComponents(string: "\(proxyServer)/\(action)")!
+        urlComponents.queryItems = params.map { URLQueryItem(name: $0.key, value: $0.value) }
+        
+        let url = urlComponents.url!
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse,
+              (200...299).contains(httpResponse.statusCode) else {
+            throw PubkyClientProxyError.invalidResponse
+        }
+        
+        return data
+    }
+    
+    static func chatStoreUrl(publicKey: String, chatId: String? = nil, messageId: String? = nil) -> String {
+        var url = "pubky://\(publicKey)/pub/pubme.chat"
+        if let chatId = chatId {
+            url += "/\(chatId)"
+        }
+        
+        if let messageId = messageId {
+            url += "/\(messageId)"
+        }
+        
+        return url
+    }
 }
 
 func testPubkyClientProxy() {
     Task {
         do {
+            let chatId = "chat-1"
             print("Generating keys")
             let keypair = try await PubkyClientProxy.shared.generateKeyPair()
             print(keypair)
@@ -83,6 +172,27 @@ func testPubkyClientProxy() {
             print("Signing up")
             try await PubkyClientProxy.shared.signup(secretKey: keypair.secretKey)
             
+            print("Put")
+            try await PubkyClientProxy.shared.put(
+                publicKey: keypair.publicKey,
+                url: PubkyClientProxy.chatStoreUrl(publicKey: keypair.publicKey, chatId: chatId, messageId: "message-1"),
+                body: Message.initNewSendMessage("Hello this message was sent!").toString()
+            )
+            
+            print("List")
+            let list = try await PubkyClientProxy.shared.list(url: PubkyClientProxy.chatStoreUrl(publicKey: keypair.publicKey))
+            print("List (\(list.count)):")
+            for url in list {
+                let messageData = try await PubkyClientProxy.shared.get(url: url)
+                let message = try Message.initFromString(String(data: messageData, encoding: .utf8)!)
+                print("Fetched message: " + message.body.text)
+            }
+            
+            print("Delete")
+            try await PubkyClientProxy.shared.delete(
+                publicKey: keypair.publicKey,
+                url: PubkyClientProxy.chatStoreUrl(publicKey: keypair.publicKey, chatId: chatId, messageId: "message-1")
+            )
         } catch {
             print("ERROR:")
             print(error.localizedDescription)
