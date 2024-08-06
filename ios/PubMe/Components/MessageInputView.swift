@@ -57,16 +57,14 @@ struct MessageInputView: View {
         }
         
         isSending = true
-        let messageToSend = message
-        message = ""
         
         Task { @MainActor in
             do {
-                let _ = try await viewModel.sendMessageTo(groupId: groupId, messageToSend)
+                let _ = try await viewModel.sendMessageTo(groupId: groupId, message)
+                message = ""
             } catch {
                 Logger.error(error)
                 errorMessage = error.localizedDescription
-                message = messageToSend //So they can retry
             }
             
             isSending = false
