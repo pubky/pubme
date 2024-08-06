@@ -8,6 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		968A67E22C61486300D4C7CD /* PubkyClientProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 968A67E12C61486300D4C7CD /* PubkyClientProxy.swift */; };
+		968A67E42C62060800D4C7CD /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 968A67E32C62060800D4C7CD /* Keychain.swift */; };
+		968A67E62C62066300D4C7CD /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 968A67E52C62066300D4C7CD /* Logger.swift */; };
+		968A67EA2C6206DD00D4C7CD /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 968A67E92C6206DD00D4C7CD /* ViewModel.swift */; };
+		968A67EC2C6206E900D4C7CD /* ChatList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 968A67EB2C6206E900D4C7CD /* ChatList.swift */; };
+		968A67EE2C6206FB00D4C7CD /* Onboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 968A67ED2C6206FB00D4C7CD /* Onboarding.swift */; };
+		968A67F02C6207DF00D4C7CD /* ShowError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 968A67EF2C6207DF00D4C7CD /* ShowError.swift */; };
+		968A67F22C62110100D4C7CD /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 968A67F12C62110100D4C7CD /* ChatView.swift */; };
+		968A67F52C6211A500D4C7CD /* Messages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 968A67F42C6211A500D4C7CD /* Messages.swift */; };
 		969A9FFB2C5BC205001956F7 /* PubMeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969A9FFA2C5BC205001956F7 /* PubMeApp.swift */; };
 		969A9FFD2C5BC205001956F7 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969A9FFC2C5BC205001956F7 /* ContentView.swift */; };
 		969A9FFF2C5BC206001956F7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 969A9FFE2C5BC206001956F7 /* Assets.xcassets */; };
@@ -18,6 +26,14 @@
 
 /* Begin PBXFileReference section */
 		968A67E12C61486300D4C7CD /* PubkyClientProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PubkyClientProxy.swift; sourceTree = "<group>"; };
+		968A67E32C62060800D4C7CD /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
+		968A67E52C62066300D4C7CD /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		968A67E92C6206DD00D4C7CD /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		968A67EB2C6206E900D4C7CD /* ChatList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatList.swift; sourceTree = "<group>"; };
+		968A67ED2C6206FB00D4C7CD /* Onboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboarding.swift; sourceTree = "<group>"; };
+		968A67EF2C6207DF00D4C7CD /* ShowError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowError.swift; sourceTree = "<group>"; };
+		968A67F12C62110100D4C7CD /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
+		968A67F42C6211A500D4C7CD /* Messages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Messages.swift; sourceTree = "<group>"; };
 		969A9FF72C5BC205001956F7 /* PubMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PubMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		969A9FFA2C5BC205001956F7 /* PubMeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PubMeApp.swift; sourceTree = "<group>"; };
 		969A9FFC2C5BC205001956F7 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -43,8 +59,37 @@
 			isa = PBXGroup;
 			children = (
 				968A67E12C61486300D4C7CD /* PubkyClientProxy.swift */,
+				968A67E32C62060800D4C7CD /* Keychain.swift */,
+				968A67E52C62066300D4C7CD /* Logger.swift */,
+				968A67EF2C6207DF00D4C7CD /* ShowError.swift */,
 			);
 			path = Util;
+			sourceTree = "<group>";
+		};
+		968A67E72C6206C000D4C7CD /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				968A67ED2C6206FB00D4C7CD /* Onboarding.swift */,
+				968A67EB2C6206E900D4C7CD /* ChatList.swift */,
+				968A67F12C62110100D4C7CD /* ChatView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		968A67E82C6206CA00D4C7CD /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				968A67E92C6206DD00D4C7CD /* ViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		968A67F32C62119500D4C7CD /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				968A67F42C6211A500D4C7CD /* Messages.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		969A9FEE2C5BC205001956F7 = {
@@ -68,6 +113,9 @@
 			children = (
 				969A9FFA2C5BC205001956F7 /* PubMeApp.swift */,
 				969A9FFC2C5BC205001956F7 /* ContentView.swift */,
+				968A67E72C6206C000D4C7CD /* Views */,
+				968A67E82C6206CA00D4C7CD /* ViewModels */,
+				968A67F32C62119500D4C7CD /* Models */,
 				968A67E02C61484A00D4C7CD /* Util */,
 				969AA01A2C5CF323001956F7 /* pubkyclient.swift */,
 				969AA0182C5CF31D001956F7 /* Pubky.xcframework */,
@@ -155,10 +203,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				968A67EE2C6206FB00D4C7CD /* Onboarding.swift in Sources */,
+				968A67F52C6211A500D4C7CD /* Messages.swift in Sources */,
 				969A9FFD2C5BC205001956F7 /* ContentView.swift in Sources */,
+				968A67EA2C6206DD00D4C7CD /* ViewModel.swift in Sources */,
+				968A67E62C62066300D4C7CD /* Logger.swift in Sources */,
+				968A67F22C62110100D4C7CD /* ChatView.swift in Sources */,
 				968A67E22C61486300D4C7CD /* PubkyClientProxy.swift in Sources */,
 				969A9FFB2C5BC205001956F7 /* PubMeApp.swift in Sources */,
+				968A67EC2C6206E900D4C7CD /* ChatList.swift in Sources */,
 				969AA01B2C5CF323001956F7 /* pubkyclient.swift in Sources */,
+				968A67E42C62060800D4C7CD /* Keychain.swift in Sources */,
+				968A67F02C6207DF00D4C7CD /* ShowError.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -300,6 +356,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -329,6 +386,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
