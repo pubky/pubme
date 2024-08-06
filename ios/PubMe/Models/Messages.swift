@@ -10,6 +10,10 @@ import SwiftUI
 struct ChatGroup: Identifiable {
     var id = UUID().uuidString
     var publicKeys: [String]
+    
+    var shortId: String {
+        return id.split(separator: "-").first.map { String($0) } ?? ""
+    }
 }
 
 struct MessageBody: Codable {

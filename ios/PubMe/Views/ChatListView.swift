@@ -18,21 +18,28 @@ struct ChatListView: View {
                     .navigationBarItems(leading: settingsButton)
                     .navigationBarItems(trailing: addButton)
                     .navigationTitle("Pubme")
-                    .overlay {
-                        if groups.count == 0 {
-                            VStack {
-                                Text("No Chat Groups")
-                                    .font(.title)
-                                    .padding()
-                                
-                                NavigationLink(destination: ChatView(groupId: nil)) {
-                                    Label("Create New Group", systemImage: "plus.circle")
-                                }
-                            }
-                        }
-                    }
             } else {
                 loader
+            }
+        }
+        .overlay {
+            VStack {
+                Text("No Chat Groups")
+                    .font(.title)
+                    .padding()
+                NavigationLink(destination: ChatView(group: nil)) {
+                    Label("Create New Group", systemImage: "plus.circle")
+                }
+            }
+            .opacity(viewModel.chatGroups?.count ?? 0 > 0 ? 0 : 1)
+        }
+        .overlay {
+            
+            VStack {
+                Spacer()
+                NavigationLink(destination: FriendsPublicKeys()) {
+                    Label("Friend pubkeys", systemImage: "key.fill")
+                }
             }
         }
         .onAppear {
@@ -50,19 +57,18 @@ struct ChatListView: View {
     }
     
     var addButton: some View {
-        NavigationLink(destination: ChatView(groupId: nil)) {
+        NavigationLink(destination: ChatView(group: nil)) {
             Image(systemName: "plus.circle")
         }
     }
     
-    
     var list: some View {
         List(viewModel.chatGroups!) { group in
-            NavigationLink(destination: ChatView(groupId: group.id)) {
+            NavigationLink(destination: ChatView(group: group)) {
                 HStack {
                     Image(systemName: "person.3")
                         .foregroundColor(Color("AccentColor"))
-                    Text(group.id.split(separator: "-").first ?? "Unknown")
+                    Text(group.shortId)
                         .font(.caption)
                 }
             }
