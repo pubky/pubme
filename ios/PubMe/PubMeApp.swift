@@ -12,6 +12,13 @@ struct PubMeApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+//            VStack {
+//                Text("Hello, world!")
+//                    .padding()
+//            }
+                .onAppear {
+                    testPubkyClient()
+                }
         }
     }
 }

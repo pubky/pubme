@@ -34,7 +34,7 @@ struct Message: Codable, Identifiable {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         guard let data = jsonString.data(using: .utf8) else {
-            throw PubkyClientProxyError.invalidJson
+            throw PubkyClientError.invalidJson
         }
         return try decoder.decode(Message.self, from: data)
     }
@@ -47,7 +47,7 @@ struct Message: Codable, Identifiable {
         if let jsonString = String(data: data, encoding: .utf8) {
             return jsonString
         } else {
-            throw PubkyClientProxyError.invalidJson
+            throw PubkyClientError.invalidJson
         }
     }
 

@@ -41,9 +41,10 @@ class ViewModel: ObservableObject {
     }
     
     func createKeyPair() async throws {
-        let keypair = try await PubkyClientProxy.shared.generateKeyPair()
-        try Keychain.saveString(key: .publicKey, str: keypair.publicKey)
-        try Keychain.saveString(key: .secretKey, str: keypair.secretKey)
+        let keypair = try await PubkyClient.shared.generateKeyPair()
+        
+        try Keychain.saveString(key: .publicKey, str: keypair.public_key)
+        try Keychain.saveString(key: .secretKey, str: keypair.secret_key)
         try await setKeypairExistsState()
     }
     
@@ -51,7 +52,7 @@ class ViewModel: ObservableObject {
         guard let secretKey = try Keychain.loadString(key: .secretKey) else {
             throw ViewModelErrors.missingKey
         }
-        try await PubkyClientProxy.shared.signup(secretKey: secretKey, homeServerPublicKey: homeServerPublicKey)
+        try await PubkyClient.shared.signup(secretKey: secretKey, homeServerPublicKey: homeServerPublicKey)
     }
     
     func loadAllChatGroups() async throws {
@@ -84,9 +85,9 @@ class ViewModel: ObservableObject {
     private func loadChatGroupsFor(publicKey: String) async throws -> [String] {
         Logger.info("Loading chat groups for \(publicKey)")
         
-        let appDatastore = PubkyClientProxy.chatStoreUrl(publicKey: publicKey)
+        let appDatastore = PubkyClient.chatStoreUrl(publicKey: publicKey)
         
-        let urls = try await PubkyClientProxy.shared.list(url: appDatastore)
+        let urls = try await PubkyClient.shared.listC(url: appDatastore)
         
         return urls
             .map { $0.replacingOccurrences(of: appDatastore, with: "").split(separator: "/").first ?? "" }
@@ -101,9 +102,8 @@ class ViewModel: ObservableObject {
         
         let chatId = UUID().uuidString
         
-        try await PubkyClientProxy.shared.put(
-            publicKey: publicKey,
-            url: PubkyClientProxy.chatStoreUrl(publicKey: publicKey, chatId: chatId, messageId: "message-1"),
+        try await PubkyClient.shared.putC(
+            url: PubkyClient.chatStoreUrl(publicKey: publicKey, chatId: chatId, messageId: "message-1"),
             body: Message.initNewSendMessage("\(publicKey) started a new chat", ownPublicKey: publicKey).toString()
         )
         
@@ -127,17 +127,17 @@ class ViewModel: ObservableObject {
         // Load all messages from own and friends stores
         let publicKeys = [myPublicKey] + getFriendsPublicKeys()
         
-        let urls = publicKeys.map { PubkyClientProxy.chatStoreUrl(publicKey: $0, chatId: groupId) }
+        let urls = publicKeys.map { PubkyClient.chatStoreUrl(publicKey: $0, chatId: groupId) }
         var messages: [Message] = []
 
         for url in urls {
-            let messageUrls = try await PubkyClientProxy.shared.list(url: url)
+            let messageUrls = try await PubkyClient.shared.listC(url: url)
             
             Logger.info("Loading messages for \(groupId) [\(messageUrls.count)]")
             
             for url in messageUrls {
-                let messageData = try await PubkyClientProxy.shared.get(url: url)
-                try messages.append(Message.initFromString(String(data: messageData, encoding: .utf8)!))
+                let messageData = try await PubkyClient.shared.getC(url: url)
+                try messages.append(Message.initFromString(messageData))
             }
         }
         
@@ -153,9 +153,8 @@ class ViewModel: ObservableObject {
         
         let message = Message.initNewSendMessage(text, ownPublicKey: publicKey)
         
-        try await PubkyClientProxy.shared.put(
-            publicKey: publicKey,
-            url: PubkyClientProxy.chatStoreUrl(publicKey: publicKey, chatId: groupId, messageId: message.id),
+        try await PubkyClient.shared.putC(
+            url: PubkyClient.chatStoreUrl(publicKey: publicKey, chatId: groupId, messageId: message.id),
             body: message.toString()
         )
         
@@ -167,10 +166,10 @@ class ViewModel: ObservableObject {
             throw ViewModelErrors.missingKey
         }
         
-        try await PubkyClientProxy.shared.delete(
-            publicKey: publicKey,
-            url: PubkyClientProxy.chatStoreUrl(publicKey: publicKey, chatId: chatId, messageId: message.id)
-        )
+//        try await PubkyClientProxy_REMOVEME.shared.delete(
+//            publicKey: publicKey,
+//            url: PubkyClientProxy_REMOVEME.chatStoreUrl(publicKey: publicKey, chatId: chatId, messageId: message.id)
+//        )
     }
     
     func deleteChatGroup(_ chatId: String) async throws {
@@ -178,10 +177,10 @@ class ViewModel: ObservableObject {
             throw ViewModelErrors.missingKey
         }
         
-        try await PubkyClientProxy.shared.delete(
-            publicKey: publicKey,
-            url: PubkyClientProxy.chatStoreUrl(publicKey: publicKey, chatId: chatId)
-        )
+//        try await PubkyClientProxy_REMOVEME.shared.delete(
+//            publicKey: publicKey,
+//            url: PubkyClientProxy_REMOVEME.chatStoreUrl(publicKey: publicKey, chatId: chatId)
+//        )
     }
     
     func getFriendsPublicKeys() -> [String] {

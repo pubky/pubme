@@ -24,7 +24,7 @@ enum Env {
         static let isDebug = false
     #endif
     
-    static let defaultHomeServer = "pubky://8pinxxgqs41n4aididenw5apqp1urfmzdztr8jt4abrkdn435ewo"
+    static let defaultHomeServer = "pubky://bwmemps8m6n6gubd3rrtj3efzkkez93rjdup77cffn9knbidz8ty"
     static let tempClientProxyServer = "http://localhost:3000"
     
     static let tempDefaultFriendPublicKeys = [

@@ -66,10 +66,9 @@ struct OnboardingView: View {
             
             // Place on random background queue
             DispatchQueue.global().async {
-                let pkClient = PubkyClient()
                 var r = ""
                 do {
-                    r = try pkClient.pkarrResolve(publicKey: viewModel.homeServerPublicKey)
+                    r = try (resolve(publicKey: viewModel.homeServerPublicKey)).joined(separator: "\n")
                 } catch {
                     DispatchQueue.main.async {
                         errorMessage = error.localizedDescription
