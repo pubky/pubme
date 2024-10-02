@@ -15,7 +15,6 @@ struct OnboardingView: View {
     
     @StateObject var viewModel = ViewModel.shared
     
-    
     var body: some View {
         VStack {
             Text("Welcome to PubMe!")
@@ -39,7 +38,7 @@ struct OnboardingView: View {
                 }
                 
                 if !resolved.isEmpty {
-                    Text((resolved))
+                    Text(resolved)
                         .font(.caption2)
                         .foregroundColor(.green)
                         .padding()
@@ -65,7 +64,7 @@ struct OnboardingView: View {
         Button(action: {
             isResolving = true
             
-            //Place on random background queue
+            // Place on random background queue
             DispatchQueue.global().async {
                 let pkClient = PubkyClient()
                 var r = ""

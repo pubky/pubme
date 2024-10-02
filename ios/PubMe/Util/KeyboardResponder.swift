@@ -5,15 +5,14 @@
 //  Created by Jason van den Berg on 2024/08/06.
 //
 
-
-import SwiftUI
 import Combine
+import SwiftUI
 
 final class KeyboardResponder: ObservableObject {
     private var notificationCenter: NotificationCenter
     @Published private(set) var currentHeight: CGFloat = 0
     @Published var isOpen = false
-    
+
     init(center: NotificationCenter = .default) {
         notificationCenter = center
         notificationCenter.addObserver(self, selector: #selector(keyBoardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -30,12 +29,12 @@ final class KeyboardResponder: ObservableObject {
         isOpen = true
         setSize(notification)
     }
-    
+
     @objc func keyBoardDidShow(notification: Notification) {
         isOpen = true
         setSize(notification)
     }
-    
+
     @objc func keyBoardDidHide(notification: Notification) {
         isOpen = false
         currentHeight = 0
@@ -45,7 +44,7 @@ final class KeyboardResponder: ObservableObject {
         isOpen = false
         currentHeight = 0
     }
-    
+
     private func setSize(_ notification: Notification) {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             currentHeight = keyboardSize.height

@@ -17,11 +17,19 @@ fastify.post('/signup', async (request, reply) => {
 
   const keypair = Keypair.fromSecretKey(z32ToBytes(secretKey));
 
+
+
   const homeserver = PublicKey.from(homeServerPublicKey);
+
+  
 
   const client = PubkyClient.testnet();
   
   await client.signup(keypair, homeserver);
+
+  console.log(homeServerPublicKey);
+  reply.send({ message: 'Success' });
+  return;
 
   clients[keypair.publicKey().z32()] = client;
 

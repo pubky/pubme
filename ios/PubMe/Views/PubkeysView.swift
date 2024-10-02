@@ -25,7 +25,7 @@ struct PubkeysView: View {
                     viewModel.addFriendPublicKey(newPublicKey)
                     newPublicKey = ""
                     
-                    //Reload with pubkeys we now know
+                    // Reload with pubkeys we now know
                     Task { @MainActor in
                         try? await viewModel.loadAllChatGroups()
                     }
@@ -50,7 +50,7 @@ struct PubkeysView: View {
     @ViewBuilder
     var existingList: some View {
         if viewModel.friendsPublicKeys.isEmpty {
-            Text("No friends public keys")
+            Text("No saved pubkeys")
         } else {
             let list = viewModel.getFriendsPublicKeys()
             ForEach(list, id: \.self) { key in

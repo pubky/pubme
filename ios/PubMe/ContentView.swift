@@ -7,11 +7,11 @@
 
 import SwiftUI
 
-//let client = PubkyClient()
+// let client = PubkyClient()
 
 struct ContentView: View {
     @StateObject private var viewModel = ViewModel.shared
-    
+
     var body: some View {
         NavigationView {
             if viewModel.keypairExists == nil {

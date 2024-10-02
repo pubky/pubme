@@ -23,14 +23,14 @@ class PubkyClientProxy {
     }
     
     func signup(secretKey: String, homeServerPublicKey: String) async throws {
-        let _ = try await Self.postRequest("signup", [
+        _ = try await Self.postRequest("signup", [
             "secretKey": secretKey,
             "homeServerPublicKey": homeServerPublicKey
         ])
     }
     
     func put(publicKey: String, url: String, body: String) async throws {
-        let _ = try await Self.postRequest("put", [
+        _ = try await Self.postRequest("put", [
             "publicKey": publicKey,
             "url": url,
             "body": body
@@ -39,11 +39,11 @@ class PubkyClientProxy {
         print("PUT: \(url)")
     }
     
-    //Lists all URLs
+    // Lists all URLs
     func list(url: String) async throws -> [String] {
         print(url)
         let listJsonString = try await Self.getRequest("list", [
-            "url": url,
+            "url": url
         ])
         
         guard let list = try JSONSerialization.jsonObject(with: listJsonString, options: []) as? [String] else {
@@ -60,7 +60,7 @@ class PubkyClientProxy {
     }
     
     func delete(publicKey: String, url: String) async throws {
-        let _ = try await Self.postRequest("delete", [
+        _ = try await Self.postRequest("delete", [
             "publicKey": publicKey,
             "url": url
         ])
@@ -84,7 +84,8 @@ extension PubkyClientProxy {
         let (data, response) = try await URLSession.shared.data(for: request)
         
         guard let httpResponse = response as? HTTPURLResponse,
-              (200...299).contains(httpResponse.statusCode) else {
+              (200...299).contains(httpResponse.statusCode)
+        else {
             throw PubkyClientProxyError.invalidResponse
         }
         
@@ -102,7 +103,8 @@ extension PubkyClientProxy {
         let (data, response) = try await URLSession.shared.data(for: request)
         
         guard let httpResponse = response as? HTTPURLResponse,
-              (200...299).contains(httpResponse.statusCode) else {
+              (200...299).contains(httpResponse.statusCode)
+        else {
             throw PubkyClientProxyError.invalidResponse
         }
         

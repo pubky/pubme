@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 const server = 'http://0.0.0.0:3000';
-const homeServerPublicKey = '8pinxxgqs41n4aididenw5apqp1urfmzdztr8jt4abrkdn435ewo';
+const homeServerPublicKey = 'i7pjquwrn8foydw36xqtfkka1rronaqn16b7mpd85d7n699d4ezo';
 
 const createMessage = (text) => {
     return {
@@ -36,6 +36,8 @@ const test = async () => {
     }
 
     console.log('✅ Signup');
+
+    return;
 
     
     // Save data

@@ -10,48 +10,49 @@ import SwiftUI
 struct ChatListView: View {
     @State var errorMessage = ""
     @StateObject var viewModel = ViewModel.shared
+    @State var showSettings = false
     
     var body: some View {
-        Group {
-            if let groups = viewModel.chatGroups {
-                list
-                    .navigationBarItems(leading: settingsButton)
-                    .navigationBarItems(trailing: addButton)
-                    .navigationTitle("Chats")
-            } else {
-                loader
+        list
+            .navigationBarItems(leading: settingsButton)
+            .navigationBarItems(trailing: addButton)
+            .navigationTitle("Chats")
+            .overlay {
+                VStack {
+                    Text("No Chat Groups")
+                        .font(.title)
+                        .padding()
+                    NavigationLink(destination: ChatView(group: nil)) {
+                        Label("Create New Group", systemImage: "plus.circle")
+                    }
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .opacity(viewModel.chatGroups?.count ?? 0 > 0 ? 0 : 1)
             }
-        }
-        .overlay {
-            VStack {
-                Text("No Chat Groups")
-                    .font(.title)
-                    .padding()
-                NavigationLink(destination: ChatView(group: nil)) {
-                    Label("Create New Group", systemImage: "plus.circle")
+            .overlay {
+                VStack {
+                    Spacer()
+                    NavigationLink(destination: PubkeysView()) {
+                        Label("Pubkeys", systemImage: "key.fill")
+                    }
                 }
             }
-            .opacity(viewModel.chatGroups?.count ?? 0 > 0 ? 0 : 1)
-        }
-        .overlay {
-            
-            VStack {
-                Spacer()
-                NavigationLink(destination: PubkeysView()) {
-                    Label("Pubkeys", systemImage: "key.fill")
+            .onAppear {
+                Task { @MainActor in
+                    await loadChatGroups()
                 }
             }
-        }
-        .onAppear {
-            Task { @MainActor in
-                await loadChatGroups()
+            .sheet(isPresented: $showSettings) {
+                SettingsView()
             }
-        }
-        .showError($errorMessage)
+            .showError($errorMessage)
     }
     
     var settingsButton: some View {
-        NavigationLink(destination: SettingsView()) {
+//        NavigationLink(destination: SettingsView()) {
+//            Image(systemName: "gear")
+//        }
+        Button(action: { showSettings.toggle() }) {
             Image(systemName: "gear")
         }
     }
@@ -63,7 +64,7 @@ struct ChatListView: View {
     }
     
     var list: some View {
-        List(viewModel.chatGroups!) { group in
+        List(viewModel.chatGroups ?? []) { group in
             NavigationLink(destination: ChatView(group: group)) {
                 HStack {
                     Image(systemName: "person.3")
@@ -71,6 +72,20 @@ struct ChatListView: View {
                     Text(group.shortId)
                         .font(.caption)
                 }
+//                .swipeActions() {
+//                    Button(role: .destructive) {
+//                        Task {
+//                            do {
+//                                try await viewModel.deleteChatGroup(group.id)
+//                            } catch {
+//                                errorMessage = error.localizedDescription
+//                                await loadChatGroups()
+//                            }
+//                        }
+//                    } label: {
+//                        Label("Delete", systemImage: "trash")
+//                    }
+//                }
             }
         }
         .refreshable {

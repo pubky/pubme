@@ -10,7 +10,7 @@ import SwiftUI
 struct MessageInputView: View {
     let groupId: String
     
-    @Binding var keyboardOpen: Bool //TODO not needed?
+    @Binding var keyboardOpen: Bool // TODO: not needed?
     @State var message: String = ""
     @State var backgroundOpacity: Double = 0
     @State var isSending = false
@@ -40,7 +40,7 @@ struct MessageInputView: View {
         }
         .onChange(of: keyboardOpen) { newValue in
             withAnimation(.easeOut(duration: 0.2)) {
-                backgroundOpacity =  newValue ? 1 : 0
+                backgroundOpacity = newValue ? 1 : 0
             }
         }
         .showError($errorMessage)
@@ -52,7 +52,7 @@ struct MessageInputView: View {
     
     func sendMessage() {
         guard canSend else {
-            //Ignore empty messages
+            // Ignore empty messages
             return
         }
         
@@ -71,7 +71,6 @@ struct MessageInputView: View {
         }
     }
 }
-
 
 #Preview {
     MessageInputView(groupId: "test123", keyboardOpen: .constant(true))

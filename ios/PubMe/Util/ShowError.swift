@@ -7,15 +7,15 @@
 
 import SwiftUI
 
-fileprivate struct ShowErrorMessage: ViewModifier {
+private struct ShowErrorMessage: ViewModifier {
     @Binding var message: String
-    
+
     @State private var showError = false
-    
+
     func body(content: Content) -> some View {
         content
             .alert(message, isPresented: $showError) {
-                Button("OK", role: .cancel) { }
+                Button("OK", role: .cancel) {}
             }
             .onAppear {
                 showError = message.trimmingCharacters(in: .whitespacesAndNewlines) != ""
@@ -33,7 +33,7 @@ fileprivate struct ShowErrorMessage: ViewModifier {
 
 extension View {
     func showError(_ message: Binding<String>) -> some View {
-        self.modifier(ShowErrorMessage(message: message))
+        modifier(ShowErrorMessage(message: message))
     }
 }
 

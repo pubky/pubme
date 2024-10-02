@@ -35,7 +35,7 @@ class ViewModel: ObservableObject {
             keypairExists = exists
             
         } catch {
-            //TODO show error
+            // TODO: show error
             Logger.error(error)
         }
     }
@@ -59,7 +59,7 @@ class ViewModel: ObservableObject {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 self.chatGroups = [
                     ChatGroup(id: UUID().uuidString, publicKeys: [UUID().uuidString, UUID().uuidString, UUID().uuidString]),
-                    ChatGroup(id: UUID().uuidString, publicKeys: [UUID().uuidString, UUID().uuidString])
+                    ChatGroup(id: UUID().uuidString, publicKeys: [UUID().uuidString, UUID().uuidString]),
                 ]
             }
             return
@@ -71,7 +71,7 @@ class ViewModel: ObservableObject {
         
         var groupIds = try await loadChatGroupsFor(publicKey: myPublicKey)
         
-        //Load all friend's public keys
+        // Load all friend's public keys
         let friends = getFriendsPublicKeys()
         for friend in friends {
             let friendGroups = try await loadChatGroupsFor(publicKey: friend)
@@ -107,7 +107,7 @@ class ViewModel: ObservableObject {
             body: Message.initNewSendMessage("\(publicKey) started a new chat", ownPublicKey: publicKey).toString()
         )
         
-        //TODO: load friends pubkeys
+        // TODO: load friends pubkeys
         return .init(id: chatId, publicKeys: [])
     }
     
@@ -124,10 +124,10 @@ class ViewModel: ObservableObject {
             throw ViewModelErrors.missingKey
         }
         
-        //Load all messages from own and friends stores
+        // Load all messages from own and friends stores
         let publicKeys = [myPublicKey] + getFriendsPublicKeys()
         
-        let urls = publicKeys.map({ PubkyClientProxy.chatStoreUrl(publicKey: $0, chatId: groupId) })
+        let urls = publicKeys.map { PubkyClientProxy.chatStoreUrl(publicKey: $0, chatId: groupId) }
         var messages: [Message] = []
 
         for url in urls {
@@ -137,7 +137,7 @@ class ViewModel: ObservableObject {
             
             for url in messageUrls {
                 let messageData = try await PubkyClientProxy.shared.get(url: url)
-                messages.append(try Message.initFromString(String(data: messageData, encoding: .utf8)!))
+                try messages.append(Message.initFromString(String(data: messageData, encoding: .utf8)!))
             }
         }
         
@@ -173,8 +173,19 @@ class ViewModel: ObservableObject {
         )
     }
     
+    func deleteChatGroup(_ chatId: String) async throws {
+        guard let publicKey = try Keychain.loadString(key: .publicKey) else {
+            throw ViewModelErrors.missingKey
+        }
+        
+        try await PubkyClientProxy.shared.delete(
+            publicKey: publicKey,
+            url: PubkyClientProxy.chatStoreUrl(publicKey: publicKey, chatId: chatId)
+        )
+    }
+    
     func getFriendsPublicKeys() -> [String] {
-        self.friendsPublicKeys.split(separator: "|").map { String($0) }
+        friendsPublicKeys.split(separator: "|").map { String($0) }
     }
     
     func addFriendPublicKey(_ publicKey: String) {

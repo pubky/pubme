@@ -10,7 +10,7 @@ if (!HOST || !PORT) {
 }
 
 start({host: HOST, port: PORT}).then(() => {
-    console.log("Server started");
+    console.log("Proxy server started");
 }).catch((error) => {
     console.error(error);
     process.exit(1);

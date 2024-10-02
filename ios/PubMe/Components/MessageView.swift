@@ -7,20 +7,20 @@
 
 import SwiftUI
 
-struct MessageView : View {
+struct MessageView: View {
     let message: Message
     let isCurrentUser: Bool
     let chatId: String
-    
+
     var body: some View {
         let colorSet1 = [Color("AccentColor"), Color("AccentColor").opacity(0.8)]
         let colorSet2 = [Color.gray.opacity(0.3), Color.gray.opacity(0.4)]
-        
+
         HStack(alignment: .bottom, spacing: 15) {
             if isCurrentUser {
                 Spacer()
             }
-            
+
             ContentMessageView(
                 contentMessage: message.body.text,
                 isCurrentUser: isCurrentUser
@@ -37,13 +37,13 @@ struct MessageView : View {
                     menuItems
                 }
             }
-            
+
             if !isCurrentUser {
                 Spacer()
             }
         }
     }
-    
+
     var menuItems: some View {
         Group {
             Button {
@@ -61,7 +61,7 @@ struct MessageView : View {
 struct ContentMessageView: View {
     var contentMessage: String
     var isCurrentUser: Bool
-    
+
     var body: some View {
         Text(contentMessage)
             .padding(10)
