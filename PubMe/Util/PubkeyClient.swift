@@ -55,7 +55,12 @@ class PubkyClient {
     // Lists all URLs
     func listC(url: String) async throws -> [String] {
         let result = list(url: url)
-        try validateResult(result)
+        do {
+            try validateResult(result)
+        } catch {
+            // TODO: handle error if 404 error
+            return []
+        }
         
         Logger.info(result[1])
         
