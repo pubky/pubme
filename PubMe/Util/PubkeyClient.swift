@@ -61,6 +61,8 @@ class PubkyClient {
         
         let jsonStringArray = result[1]
         
+        Logger.info(jsonStringArray)
+        
         guard let jsonData = jsonStringArray.data(using: .utf8) else {
             throw PubkyClientError.invalidResult
         }
