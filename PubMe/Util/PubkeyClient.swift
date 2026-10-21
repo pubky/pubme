@@ -2,7 +2,7 @@
 //  PubkeyClient.swift
 //  PubMe
 //
-//  Created by Jason van den Berg on 2024/10/02.
+//  Created by Jasonvdb on 2024/10/02.
 //
 
 import Foundation
